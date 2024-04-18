@@ -1,3 +1,3 @@
 # sceth
 
-** Building zk-Bridge for the infinite garden **
+**Building zk-Bridge for the infinite garden**
