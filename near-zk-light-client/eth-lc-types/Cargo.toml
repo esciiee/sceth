@@ -1,0 +1,9 @@
+[package]
+name = "eth-lc-types"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+types = {package = "near-zk-types", path = "../types" }
