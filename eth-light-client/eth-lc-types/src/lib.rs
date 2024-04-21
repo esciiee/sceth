@@ -15,6 +15,7 @@ pub struct LightClientStore {
     pub current_max_active_participants: u64,
 }
 
+#[derive(serde::Deserialize, Debug)]
 pub struct LightClientBootstrap {
     pub header: BeaconBlockHeader,
     pub current_sync_committee: SyncCommittee,
@@ -60,11 +61,14 @@ fn get_bits(bitfield: &Bitvector<512>) -> u64 {
     count
 }
 
-pub fn initialize_light_client(_trusted_block_root: Bytes32, bootstrap : LightClientBootstrap) -> LightClientBootstrap {
+pub fn initialize_light_client(_trusted_block_root: Bytes32, bootstrap : &LightClientBootstrap) -> LightClientStore {
     // make checks here
-    LightClientBootstrap {
-        header: bootstrap.header,
-        current_sync_committee: bootstrap.current_sync_committee,
-        current_sync_committee_branch: bootstrap.current_sync_committee_branch
+    LightClientStore {
+        finalized_header: bootstrap.header.clone(),
+        current_sync_committee: bootstrap.current_sync_committee.clone(),
+        next_sync_committee: None,
+        optimistic_header: bootstrap.header.clone(),
+        previous_max_active_participants: 0,
+        current_max_active_participants: 0,
     }
 }

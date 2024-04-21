@@ -4,6 +4,7 @@ use near_zk_types::{
 };
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
 use serde::{Deserialize, Serialize};
+use eth_lc::{initialize_light_client, types::Bytes32, LightClientBootstrap, LightClientStore};
 
 #[derive(Debug, Deserialize, Serialize)]
 struct ExpectedParams {
@@ -17,10 +18,10 @@ struct Params {
     new_block: LightClientBlockView,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 struct TestCase {
     description: String,
-    expected: ExpectedParams,
+    init: LightClientBootstrap,
     params: Params,
 }
 
@@ -32,9 +33,23 @@ fn main() -> anyhow::Result<()> {
 
     // NOTE: These test vectors come from https://github.com/austinabell/near-light-client-tests
     //       and are generated using mainnet data pulled from RPC.
-    let contents = include_str!("../../test-vectors/mainnet-80000000-81000000.json");
-
+    // let contents = include_str!("../../test-vectors/mainnet-80000000-81000000.json");
+    let contents = include_str!("../../test-vectors/ethereum-mainnet-slot-8905792.json");
     let test_cases: Vec<TestCase> = serde_json::from_str(&contents)?;
+    let init_bootstrap = &test_cases[0].init;
+    let byte: Bytes32 = Bytes32::default();
+    let lc_store = initialize_light_client(byte, init_bootstrap);
+
+
+
+
+
+
+
+
+
+
+
     let initial_block_params = &test_cases[0].params;
     let mut prev_context: PrevBlockContext = PrevBlockContext::Block {
         prev_block: initial_block_params.previous_block.clone(),

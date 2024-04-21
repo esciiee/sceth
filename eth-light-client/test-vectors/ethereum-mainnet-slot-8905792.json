@@ -1,9 +1,6 @@
 [
   {
     "description": "Mainnet Block 80020288",
-    "expected": {
-      "is_valid": true
-    },
     "init": {
         "header": {
             "beacon": {
