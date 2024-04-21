@@ -11,6 +11,42 @@ pub type BLSPubKey = ByteVector<48>;
 pub type SignatureBytes = ByteVector<96>;
 pub type Transaction = ByteList<1073741824>;
 
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct LCHeader {
+    pub beacon: BeaconBlockHeader,
+    pub execution: ExecutionPayload,
+    pub execution_branch: Vec<Bytes32>
+}
+
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct ExecutionPayload {
+    pub parent_hash: Bytes32,
+    pub fee_recipient: Address,
+    pub state_root: Bytes32,
+    pub receipts_root: Bytes32,
+    pub logs_bloom: LogsBloom,
+    pub prev_randao: Bytes32,
+    pub block_number: U64,
+    pub gas_limit: U64,
+    pub gas_used: U64,
+    pub timestamp: U64,
+    pub extra_data: ByteList<32>,
+    pub base_fee_per_gas: U256,
+    pub block_hash: Bytes32,
+    // pub transactions: List<Transaction, 1048576>,
+    // pub withdrawals: List<Withdrawal, 16>,
+    pub blob_gas_used: U64,
+    pub excess_blob_gas: U64,
+}
+
+#[derive(Default, Clone, Debug, SimpleSerialize, serde::Deserialize)]
+pub struct Withdrawal {
+    index: U64,
+    validator_index: U64,
+    address: Address,
+    amount: U64,
+}
+
 #[derive(serde::Deserialize, Debug, Default, SimpleSerialize, Clone)]
 pub struct BeaconBlockHeader {
     pub slot: U64,

@@ -560,21 +560,6 @@
             "0xac2c85bf1ecd640166cc226d948c782366ead06e05d59e2cdb93540fd83b7ef9",
             "0x9aa9748535799590746595d722e67836fdc2062a90877f98864b84e5cbffbc24"
         ]
-    },
-    "params": {}
-  },
-  {
-    "description": "Mainnet Block 80063488",
-    "expected": {
-      "is_valid": true
-    },
-    "params": {}
-  },
-  {
-    "description": "Mainnet Block 80106688",
-    "expected": {
-      "is_valid": true
-    },
-    "params": {}
+    }
   }
 ]

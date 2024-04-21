@@ -11,18 +11,17 @@ struct ExpectedParams {
     is_valid: bool,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-struct Params {
-    previous_block: LightClientBlockLiteView,
-    current_bps: Vec<ValidatorStakeView>,
-    new_block: LightClientBlockView,
-}
+// #[derive(Debug, Deserialize, Serialize)]
+// struct Params {
+//     previous_block: LightClientBlockLiteView,
+//     current_bps: Vec<ValidatorStakeView>,
+//     new_block: LightClientBlockView,
+// }
 
 #[derive(Debug, Deserialize)]
 struct TestCase {
     description: String,
     init: LightClientBootstrap,
-    params: Params,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -39,50 +38,6 @@ fn main() -> anyhow::Result<()> {
     let init_bootstrap = &test_cases[0].init;
     let byte: Bytes32 = Bytes32::default();
     let lc_store = initialize_light_client(byte, init_bootstrap);
-
-
-
-
-
-
-
-
-
-
-
-    let initial_block_params = &test_cases[0].params;
-    let mut prev_context: PrevBlockContext = PrevBlockContext::Block {
-        prev_block: initial_block_params.previous_block.clone(),
-        current_bps: initial_block_params.current_bps.clone(),
-    };
-    let mut prev_proof: Option<Receipt> = None;
-
-    for test_case in test_cases {
-        println!("Test description: {}", test_case.description);
-        let test_case = test_case.params;
-        let borsh_buffer = borsh::to_vec(&(&LIGHT_CLIENT_ID, &prev_context, &test_case.new_block))?;
-
-        let mut builder = ExecutorEnv::builder();
-        if let Some(ref receipt) = prev_proof {
-            // Verifying a proof recursively requires adding the previous proof as an assumption.
-            builder.add_assumption(receipt.clone());
-        }
-        let env = builder.write_slice(&borsh_buffer).build()?;
-
-        // Obtain the default prover.
-        let prover = default_prover();
-
-        // Produce a receipt by proving the specified ELF binary.
-        let receipt = prover.prove(env, LIGHT_CLIENT_ELF)?;
-
-        receipt.verify(LIGHT_CLIENT_ID)?;
-
-        // Update the previous context to verify off the last proof.
-        prev_context = PrevBlockContext::Proof {
-            journal: receipt.journal.bytes.clone(),
-        };
-        prev_proof = Some(receipt);
-    }
 
     Ok(())
 }

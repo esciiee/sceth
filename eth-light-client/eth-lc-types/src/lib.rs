@@ -5,19 +5,19 @@ use eyre::Result;
 
 pub mod types;
 
-#[derive(Debug, Default)]
+#[derive(Debug, serde::Deserialize)]
 pub struct LightClientStore {
-    pub finalized_header: BeaconBlockHeader,
+    pub finalized_header: LCHeader,
     pub current_sync_committee: SyncCommittee,
     pub next_sync_committee: Option<SyncCommittee>,
-    pub optimistic_header: BeaconBlockHeader,
+    pub optimistic_header: LCHeader,
     pub previous_max_active_participants: u64,
     pub current_max_active_participants: u64,
 }
 
 #[derive(serde::Deserialize, Debug)]
 pub struct LightClientBootstrap {
-    pub header: BeaconBlockHeader,
+    pub header: LCHeader,
     pub current_sync_committee: SyncCommittee,
     pub current_sync_committee_branch: Vec<Bytes32>
 }
