@@ -1,8 +1,9 @@
 use std::ops::Deref;
 
+use serde::Serialize;
 use ssz_rs::prelude::*;
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 pub struct ByteVector<const N: usize> {
     inner: Vector<u8, N>,
 }
@@ -59,7 +60,7 @@ impl<const N: usize> ssz_rs::Sized for ByteVector<N> {
 
 impl<const N: usize> ssz_rs::Serialize for ByteVector<N> {
     fn serialize(&self, buffer: &mut Vec<u8>) -> std::result::Result<usize, SerializeError> {
-        self.inner.serialize(buffer)
+        ssz_rs::Serialize::serialize(&self.inner, buffer)
     }
 }
 
@@ -89,7 +90,7 @@ impl<'de, const N: usize> serde::Deserialize<'de> for ByteVector<N> {
     }
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 pub struct ByteList<const N: usize> {
     inner: List<u8, N>,
 }
@@ -146,7 +147,7 @@ impl<const N: usize> ssz_rs::Sized for ByteList<N> {
 
 impl<const N: usize> ssz_rs::Serialize for ByteList<N> {
     fn serialize(&self, buffer: &mut Vec<u8>) -> std::result::Result<usize, SerializeError> {
-        self.inner.serialize(buffer)
+        ssz_rs::Serialize::serialize(&self.inner, buffer)
     }
 }
 
@@ -176,7 +177,7 @@ impl<'de, const N: usize> serde::Deserialize<'de> for ByteList<N> {
     }
 }
 
-#[derive(Debug, Copy, Clone, Default, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Copy, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Serialize)]
 pub struct U64 {
     inner: u64,
 }
@@ -217,7 +218,7 @@ impl ssz_rs::Sized for U64 {
 
 impl ssz_rs::Serialize for U64 {
     fn serialize(&self, buffer: &mut Vec<u8>) -> std::result::Result<usize, SerializeError> {
-        self.inner.serialize(buffer)
+        ssz_rs::Serialize::serialize(&self.inner, buffer)
     }
 }
 

@@ -1,3 +1,4 @@
+use serde::Serialize;
 use types::{primitives::*, BeaconBlockHeader};
 use ssz_rs::prelude::*;
 use crate::types::*;
@@ -5,7 +6,7 @@ use eyre::Result;
 
 pub mod types;
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct LightClientStore {
     pub finalized_header: LCHeader,
     pub current_sync_committee: SyncCommittee,

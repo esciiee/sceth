@@ -1,22 +1,12 @@
 #![no_main]
 
-use near_zk_types::{
-    ApprovalInner, CryptoHash, LightClientBlockLiteView, LightClientBlockView, PrevBlockContext,
-    ValidatorStakeView,
-};
 use risc0_zkvm::guest::env;
 use sha2::{Digest, Sha256};
-use eth_lc::{initialize_light_client, types::Bytes32, LightClientBootstrap, LightClientStore};
+use eth_lc::{types::{primitives::U64, GenericUpdate}, initialize_light_client, types::Bytes32, LightClientBootstrap, LightClientStore};
 use serde::{Deserialize, Serialize};
 
 risc0_zkvm::guest::entry!(main);
 
-type CommitData = (
-    [u32; 8],
-    CryptoHash,
-    LightClientBlockLiteView,
-    Vec<ValidatorStakeView>,
-);
 
 #[derive(Debug, Deserialize)]
 struct TestCase {
@@ -25,9 +15,6 @@ struct TestCase {
 }
 
 fn main() {
-    let mut reader = env::stdin();
-
-    let contents = include_str!("../../../test-vectors/update1.json");
     // let contents = include_str!("../../../test-vectors/ethereum-mainnet-slot-8905792.json");
     // let test_cases = match serde_json::from_str::<Vec<TestCase>>(&contents) {
     //     Ok(data) => data,
