@@ -34,9 +34,9 @@ pub fn generic_update(
         return Err(eyre::eyre!("No bits set in sync_committee_bits"));
     }
 
-    let update_finalized_slot = update.finalized_header.clone().unwrap_or_default().slot;
-    let valid_time = current_slot >= update.signature_slot && update.signature_slot > update.attested_header.slot.as_u64()
-        && update.attested_header.slot >= update_finalized_slot;
+    let update_finalized_slot = update.finalized_header.clone().unwrap();
+    let valid_time = current_slot >= update.signature_slot.as_u64() && update.signature_slot.as_u64() > update.attested_header.beacon.slot.as_u64()
+        && update.attested_header.beacon.slot >= update_finalized_slot.beacon.slot;
 
     if !valid_time {
         return Err(eyre::eyre!("Invalid time"));

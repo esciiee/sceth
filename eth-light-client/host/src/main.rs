@@ -4,7 +4,7 @@ use near_zk_types::{
 };
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
 use serde::{Deserialize, Serialize};
-use eth_lc::{initialize_light_client, types::Bytes32, LightClientBootstrap, LightClientStore};
+use eth_lc::{initialize_light_client, types::{Bytes32, GenericUpdate, Update}, LightClientBootstrap, LightClientStore};
 
 #[derive(Debug, Deserialize, Serialize)]
 struct ExpectedParams {
@@ -22,6 +22,7 @@ struct ExpectedParams {
 struct TestCase {
     description: String,
     init: LightClientBootstrap,
+    updates: Vec<GenericUpdate>
 }
 
 fn main() -> anyhow::Result<()> {
@@ -38,6 +39,20 @@ fn main() -> anyhow::Result<()> {
     let init_bootstrap = &test_cases[0].init;
     let byte: Bytes32 = Bytes32::default();
     let lc_store = initialize_light_client(byte, init_bootstrap);
+
+    let env = ExecutorEnv::builder()
+    .write(&4)
+    .unwrap()
+    .build()
+    .unwrap();
+
+
+    let prover = default_prover();
+
+    // Produce a receipt by proving the specified ELF binary.
+    let receipt = prover.prove(env, LIGHT_CLIENT_ELF)?;
+
+    receipt.verify(LIGHT_CLIENT_ID)?;
 
     Ok(())
 }

@@ -71,32 +71,33 @@ pub struct SyncAggregate {
 #[derive(serde::Deserialize, Debug, Clone)]
 pub struct Update {
     // #[serde(deserialize_with = "header_deserialize")]
-    pub attested_header: BeaconBlockHeader,
+    pub attested_header: LCHeader,
     pub next_sync_committee: SyncCommittee,
     pub next_sync_committee_branch: Vec<Bytes32>,
     // #[serde(deserialize_with = "header_deserialize")]
-    pub finalized_header: BeaconBlockHeader,
+    pub finalized_header: LCHeader,
     pub finality_branch: Vec<Bytes32>,
     pub sync_aggregate: SyncAggregate,
     pub signature_slot: U64,
 }
 
+#[derive(serde::Deserialize, Debug, Clone)]
 pub struct GenericUpdate {
-    pub attested_header: BeaconBlockHeader,
+    pub attested_header: LCHeader,
     pub sync_aggregate: SyncAggregate,
-    pub signature_slot: u64,
+    pub signature_slot: U64,
     pub next_sync_committee: Option<SyncCommittee>,
     pub next_sync_committee_branch: Option<Vec<Bytes32>>,
-    pub finalized_header: Option<BeaconBlockHeader>,
+    pub finalized_header: Option<LCHeader>,
     pub finality_branch: Option<Vec<Bytes32>>,
 }
 
 #[derive(serde::Deserialize, Debug)]
 pub struct FinalityUpdate {
     // #[serde(deserialize_with = "header_deserialize")]
-    pub attested_header: BeaconBlockHeader,
+    pub attested_header: LCHeader,
     // #[serde(deserialize_with = "header_deserialize")]
-    pub finalized_header: BeaconBlockHeader,
+    pub finalized_header: LCHeader,
     pub finality_branch: Vec<Bytes32>,
     pub sync_aggregate: SyncAggregate,
     pub signature_slot: U64,
@@ -105,7 +106,7 @@ pub struct FinalityUpdate {
 #[derive(serde::Deserialize, Debug)]
 pub struct OptimisticUpdate {
     // #[serde(deserialize_with = "header_deserialize")]
-    pub attested_header: BeaconBlockHeader,
+    pub attested_header: LCHeader,
     pub sync_aggregate: SyncAggregate,
     pub signature_slot: U64,
 }
